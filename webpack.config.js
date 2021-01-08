@@ -1,43 +1,48 @@
-const path = require("path");
+const path = require('path');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 module.exports = {
-    entry: "./src/main.js",
+    entry: './src/main.js',
     output: {
-        path: path.join(__dirname, "/dist"),
-        filename: "main.js"
+        path: path.join(__dirname, '/dist'),
+        filename: 'main.js'
     },
     module: {
         rules: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: ['cache-loader', 'babel-loader'],
+                use: ['cache-loader', 'babel-loader']
             },
             {
                 test: /\.scss$/i,
                 use: [
-                    "style-loader",
+                    'style-loader',
                     'cache-loader',
-                    "css-loader",
-                    "sass-loader",
-                ],
+                    'css-loader',
+                    'sass-loader'
+                ]
             },
             {
                 test: /\.css$/,
-                use: ["style-loader", "cache-loader","css-loader"]
+                use: ['style-loader', 'cache-loader', 'css-loader']
             },
             {
                 test: /\.svg$/i,
-                loader: 'file-loader',
-                options: {
-                    name(resourcePath, resourceQuery) {
-                        if (/fonts/.test(resourcePath)) {
-                            return `fonts/[name].[ext]?[hash]`;
+                use: [
+                    '@svgr/webpack',
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name(resourcePath, resourceQuery) {
+                                if (/fonts/.test(resourcePath)) {
+                                    return `fonts/[name].[ext]?[hash]`;
+                                }
+                                return 'images/[name].[ext]?[hash]';
+                            }
                         }
-                        return 'images/[name].[ext]?[hash]';
                     }
-                }
+                ]
             },
             {
                 test: /\.(png|jpe?g|gif)$/,
@@ -50,7 +55,6 @@ module.exports = {
     },
     devtool: 'eval-cheap-module-source-map'
 };
-
 
 if (process.env.NODE_ENV === 'production') {
     module.exports.plugins = (module.exports.plugins || []).concat([
